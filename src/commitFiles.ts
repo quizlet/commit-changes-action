@@ -25,7 +25,7 @@ async function getDefaultBranch(
 export async function createOrUpdateFiles(
   octokit: Octokit,
   {owner, repo, branch, message, files}: CreateOrUpdateFilesParams
-) {
+): Promise<string> {
   // Get info about the current state of the target branch
   const ref = `head/${branch ?? (await getDefaultBranch(octokit, {owner, repo}))}`;
   const {data: baseRef} = await octokit.git.getRef({owner, repo, ref});
@@ -56,4 +56,6 @@ export async function createOrUpdateFiles(
   // Update the branch to point at the commmit
   const {data: updatedRef} = await octokit.git.updateRef({owner, repo, ref, sha: commit.sha});
   core.info(`Updated ${ref} to ${updatedRef.object.sha}`);
+
+  return updatedRef.object.sha;
 }

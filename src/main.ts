@@ -28,7 +28,8 @@ async function main(): Promise<void> {
     files[path] = await fs.promises.readFile(path, 'utf-8');
   }
 
-  await createOrUpdateFiles(octokit, {...repo, branch, message, files});
+  const sha = await createOrUpdateFiles(octokit, {...repo, branch, message, files});
+  core.setOutput('sha', sha);
 }
 
 async function run(): Promise<void> {

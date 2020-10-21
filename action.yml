@@ -14,6 +14,9 @@ inputs:
   files:
     description: List of patterns to commit. Multiple patterns can be split with newlines
     required: true
+outputs:
+  sha:
+    description: SHA of the commit
 runs:
   using: 'node12'
   main: 'dist/index.js'

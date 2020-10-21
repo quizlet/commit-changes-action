@@ -1618,7 +1618,8 @@ async function main() {
     for await (const path of globber.globGenerator()) {
         files[path] = await fs_1.default.promises.readFile(path, 'utf-8');
     }
-    await commitFiles_1.createOrUpdateFiles(octokit, { ...repo, branch, message, files });
+    const sha = await commitFiles_1.createOrUpdateFiles(octokit, { ...repo, branch, message, files });
+    core.setOutput('sha', sha);
 }
 async function run() {
     try {
@@ -2425,6 +2426,7 @@ async function createOrUpdateFiles(octokit, { owner, repo, branch, message, file
     // Update the branch to point at the commmit
     const { data: updatedRef } = await octokit.git.updateRef({ owner, repo, ref, sha: commit.sha });
     core.info(`Updated ${ref} to ${updatedRef.object.sha}`);
+    return updatedRef.object.sha;
 }
 exports.createOrUpdateFiles = createOrUpdateFiles;
 
