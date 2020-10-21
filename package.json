@@ -5,14 +5,16 @@
   "description": "Automatically merges changes",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
+    "build": "tsc",
     "prepackage": "npm run build",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+    "prestart": "npm run build",
+    "start": "node lib/main.js",
+    "all": "npm run format && npm run lint && npm test && npm run package"
   },
   "repository": {
     "type": "git",
@@ -27,8 +29,9 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
-    "lodash": "^4.17.20",
-    "simple-git": "^2.21.0"
+    "@actions/glob": "^0.1.0",
+    "@octokit/types": "^5.5.0",
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",

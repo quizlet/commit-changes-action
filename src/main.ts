@@ -1,40 +1,34 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import simpleGit, {SimpleGit} from 'simple-git';
-import {getDelimitedArrayInput} from './util/inputs';
+import glob from '@actions/glob';
+import fs from 'fs';
+import {CreateOrUpdateFilesParams, createOrUpdateFiles} from './commitFiles';
 
 async function main(): Promise<void> {
-  const git: SimpleGit = simpleGit();
-
   const token = core.getInput('token');
   const octokit = github.getOctokit(token);
+  const {repo} = github.context;
 
+  // Check to see if the token has admin permissions on the repo. Theoretically we could be clever and check against
+  // the branch protection rules to see if this is even required, but right now admin is required for all known use
+  // cases
   const {data: user} = await octokit.users.getAuthenticated();
-  const {data: repo} = await octokit.repos.get({...github.context.repo});
-
-  const {data: repoPerms} = await octokit.repos.getCollaboratorPermissionLevel({
-    ...github.context.repo,
-    username: user.login,
-  });
-  // We could probably be a lot more clever here by checking the branch protection rules to see if it's required, but
-  // since all planned usages of this require admin to work, I don't feel like being clever
+  const {data: repoPerms} = await octokit.repos.getCollaboratorPermissionLevel({...repo, username: user.login});
   if (repoPerms.permission !== 'admin') {
     core.setFailed('Token does not have admin on the repository');
   }
 
-  const target = core.getInput('target') || repo.default_branch;
-  try {
-    await octokit.repos.getBranch({...github.context.repo, branch: target});
-  } catch (error) {
-    core.setFailed(`Failed to get get branch "${target}": ${error}`);
+  const branch = core.getInput('branch');
+  const message = core.getInput('message');
+
+  const patterns = core.getInput('patterns');
+  const globber = await glob.create(patterns);
+  const files: CreateOrUpdateFilesParams['files'] = {};
+  for await (const path of globber.globGenerator()) {
+    files[path] = await fs.promises.readFile(path, 'utf-8');
   }
 
-  const patterns = getDelimitedArrayInput('patterns') || ['*'];
-  await git.add(patterns);
-  const status = await git.status();
-  if (!status.staged) {
-    core.info('No changes to commit. Exiting');
-  }
+  await createOrUpdateFiles(octokit, {...repo, branch, message, files});
 }
 
 async function run(): Promise<void> {

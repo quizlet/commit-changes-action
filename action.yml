@@ -1,16 +1,19 @@
-name: Automerge changes
-description: Automatically merges changes
+name: Commit changes
+description: Automatically commits changes
 author: Quizlet
 inputs:
   token:
     description: Personal access token (PAT) used to perform actions against the repository
     default: ${{ github.token }}
-  target:
+  branch:
     description: Branch to merge the changes into. If not set, the target will be the default branch for the repo
     required: false
-  patterns:
-    description: List of patterns to check for changes. Can be comma or newline separated. If not set, all changes will be comitted
-    required: false
+  message:
+    description: Message for the resulting commit
+    required: true
+  files:
+    description: List of patterns to commit. Multiple patterns can be split with newlines
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
