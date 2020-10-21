@@ -1,6 +1,4 @@
 {
-  "*.ts": [
-    "eslint --cached --fix",
-    "prettier --write"
-  ]
+  "*": "prettier --write",
+  "*.ts": "eslint --cache --fix"
 }
