@@ -6,10 +6,10 @@ inputs:
     description: Personal access token (PAT) used to perform actions against the repository
     default: ${{ github.token }}
   target:
-    description: Branch to merge the changes into
-    default: master
+    description: Branch to merge the changes into. If not set, the target will be the default branch for the repo
+    required: false
   patterns:
-    description: List of patterns to check for changes. Can be comma or newline separated. If not provided, all changes will be comitted
+    description: List of patterns to check for changes. Can be comma or newline separated. If not set, all changes will be comitted
     required: false
 runs:
   using: 'node12'
