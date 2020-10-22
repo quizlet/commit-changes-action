@@ -4,14 +4,14 @@ This is an action that uses the [Github Git Database API][1] to commit changes t
 
 ## Inputs
 
-| Name              | Required | Default                      | Description                                                                                                                                           |
-| ----------------- | -------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `token`           | Y        | Default Github Actions Token | Github token to authenticate as                                                                                                                       |
-| `branch`          | N        | Default branch for the repo  | Branch to commit the changes to                                                                                                                       |
-| `message`         | Y        | N/A                          | Message for the commit                                                                                                                                |
-| `append-run-info` | N        | `true`                       | Whether to append information about the workflow to the commit                                                                                        |
-| `glob-patterns`   | Y        | N/A                          | List of [minimatch glob patterns][2]. Matching files with changes will be committed. See [examples](#example-usage) for specifying multiple patterns. |
-| `retries`         | N        | 10                           | Number of times to retry the commit (which may fail due to non-fastfoward upates)                                                                     |
+| Name              | Default/Required             | Description                                                                                                                                                   |
+| ----------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `message`         | **None**, required           | Message for the commit                                                                                                                                        |
+| `glob-patterns`   | **None**, required           | List of [minimatch glob patterns][2]. Matching files with changes will be committed. See the [examples](#example-usage) for how to specify multiple patterns. |
+| `token`           | Default Github Actions Token | Github token to authenticate as                                                                                                                               |
+| `branch`          | Default branch for the repo  | Branch to commit the changes to                                                                                                                               |
+| `append-run-info` | `true`                       | Whether to append information about the workflow to the commit                                                                                                |
+| `retries`         | 10                           | Number of times to retry the commit (which may fail due to non-fastfoward upates)                                                                             |
 
 ## Outputs
 
@@ -28,7 +28,7 @@ with:
   glob-patterns: README.md
 ```
 
-## Setting token
+### Setting token
 
 Useful when:
 
