@@ -6,14 +6,14 @@
   "configurations": [
     {
       "type": "node",
-      "name": "vscode-jest-tests",
       "request": "launch",
-      "args": ["--runInBand"],
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+      "name": "Run action",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/lib/main.js",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "outFiles": ["${workspaceFolder}/lib/**/*.js"],
+      "envFile": "${workspaceFolder}/.env",
+      "outputCapture": "std"
     }
   ]
 }
