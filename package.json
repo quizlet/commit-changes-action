@@ -3,18 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "description": "Github action to automatically commit changes",
-  "main": "lib/main.js",
+  "main": "dist/index.js",
   "scripts": {
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
-    "build": "tsc",
-    "prepackage": "npm run build",
-    "package": "ncc build --minify",
+    "build": "ncc build --minify --source-map src/main.ts",
     "test": "jest",
     "prestart": "npm run build",
     "start": "node lib/main.js",
-    "all": "npm run format && npm run lint && npm test && npm run package"
+    "all": "npm run format && npm run lint && npm test && npm run build"
   },
   "repository": {
     "type": "git",

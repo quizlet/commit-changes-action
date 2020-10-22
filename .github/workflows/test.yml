@@ -42,7 +42,7 @@ jobs:
       - name: Install deps
         run: npm ci
       - name: Build action
-        run: npm run package
+        run: npm run build
       - name: Verify no unstaged changes
         run: .github/util/verify-no-unstaged-changes.sh
   run-action:

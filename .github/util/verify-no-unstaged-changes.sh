@@ -12,6 +12,6 @@ if [[ "$(git status --porcelain)" != "" ]]; then
     echo ----------------------------------------
     echo Troubleshooting
     echo ----------------------------------------
-    echo "::error::Unstaged changes detected. Locally try running: npm run package"
+    echo "::error::Unstaged changes detected. Locally try running: npm run build"
     exit 1
 fi
