@@ -26,7 +26,7 @@ export async function createOrUpdateFiles(
   octokit: Octokit,
   {owner, repo, branch, message, files}: CreateOrUpdateFilesParams
 ): Promise<string> {
-  const ref = `heads/${branch ?? (await getDefaultBranch(octokit, {owner, repo}))}`;
+  const ref = `heads/${branch || (await getDefaultBranch(octokit, {owner, repo}))}`;
   let baseRef;
   try {
     const res = await octokit.git.getRef({owner, repo, ref});
