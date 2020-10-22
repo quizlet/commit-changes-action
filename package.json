@@ -11,7 +11,7 @@
     "build": "ncc build --minify --source-map src/main.ts",
     "test": "jest",
     "prestart": "npm run build",
-    "start": "node lib/main.js",
+    "start": "node --enable-source-maps dist/index.js",
     "all": "npm run format && npm run lint && npm test && npm run build"
   },
   "repository": {
