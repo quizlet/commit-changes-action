@@ -6,7 +6,7 @@ inputs:
     description: Personal access token (PAT) used to perform actions against the repository
     default: ${{ github.token }}
   branch:
-    description: Branch to merge the changes into. If not set, the target will be the default branch for the repo
+    description: Branch to commit the changes to. If not set, the target will be the default branch for the repo
     required: false
   message:
     description: Message for the resulting commit
