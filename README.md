@@ -1,6 +1,7 @@
 # Commit Changes Action
 
 ![Check, Build, and Run](https://github.com/quizlet/commit-changes-action/workflows/Check,%20Build,%20and%20Run/badge.svg)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](docs/CODE_OF_CONDUCT.md)
 
 This is an action that uses the [Github Git Database API][1] to commit changes to a branch. This allows for easier committing against protected branchs, and avoids a lot of potential edge cases that can occur when using `git` directly.
 
