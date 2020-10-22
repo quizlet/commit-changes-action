@@ -16,7 +16,7 @@ inputs:
     required: true
 outputs:
   sha:
-    description: SHA of the commit
+    description: SHA of the commit. Will be an empty string if there was nothing to commit.
 runs:
   using: 'node12'
   main: 'dist/index.js'
