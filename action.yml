@@ -14,7 +14,7 @@ inputs:
   append-run-info:
     description: Appends information about the run to the commit message
     default: true
-  files:
+  patterns:
     description: List of patterns to commit. Multiple patterns can be split with newlines
     required: true
 outputs:

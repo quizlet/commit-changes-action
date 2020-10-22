@@ -1,5 +1,5 @@
-name: Check and Test
-on: # rebuild any PRs and main branch changes
+name: Check and Run
+on:
   pull_request:
     types: ['opened', 'synchronize']
   push:
@@ -12,6 +12,7 @@ env:
 
 jobs:
   check:
+    name: Run code checks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -26,10 +27,16 @@ jobs:
         run: npm run test
       - name: Package
         run: npm run package
-  test: # make sure the action works on a clean machine without building
+  run-action:
+    name: Run action
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Generate file to commit
+        run: 'echo "$(date): Testing ${GITHUB_SHA}" > test.txt'
       - uses: ./
         with:
-          milliseconds: 1000
+          branch: test
+          mesage: ':robot: Test commit'
+          patterns: test.txt
