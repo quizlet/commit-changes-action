@@ -15,7 +15,7 @@ inputs:
     description: Appends information about the run to the commit message
     default: true
   patterns:
-    description: List of patterns to commit. Multiple patterns can be split with newlines
+    description: List of glob patterns for files to commit. You can specify multiple patterns split by newlines
     required: true
 outputs:
   sha:
