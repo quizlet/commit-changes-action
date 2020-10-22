@@ -14,6 +14,15 @@ export function getBooleanInput(name: string, options?: InputOptions): boolean {
   return _.includes(['true', 't', 'yes', 'y', 'on', '1'], value);
 }
 
+export function getIntegerInput(name: string, options?: InputOptions): number {
+  const value = getInput(name, options);
+  const int = parseInt(value, 10);
+  if (_.isNaN(int)) {
+    throw TypeError(`Could not parse ${value} as an integer`);
+  }
+  return int;
+}
+
 /**
  * Gets an input and interprets it as a list. Seperator is a newline if the value includes newlines, otherwise is a
  * comma.

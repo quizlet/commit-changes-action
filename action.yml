@@ -17,6 +17,9 @@ inputs:
   glob-patterns:
     description: List of minimatch glob patterns for files to commit. Multiple patterns can be split with commas or newlines
     required: true
+  retries:
+    description: Number of times to retry the commit (which may fail due to non-fastfoward upates)
+    default: 10
 outputs:
   sha:
     description: SHA of the commit. Will be an empty string if there was nothing to commit.

@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import globby from 'globby';
 import {createOrUpdateFiles} from './commitFiles';
-import {getBooleanInput, getDelimitedArrayInput} from './utils/inputs';
+import {getBooleanInput, getDelimitedArrayInput, getIntegerInput} from './utils/inputs';
 
 async function run(): Promise<void> {
   // TODO(cooper): Check token perms
@@ -35,8 +35,18 @@ async function run(): Promise<void> {
     return;
   }
 
-  const sha = await createOrUpdateFiles(octokit, {...repo, branch, message, files});
-  core.setOutput('sha', sha);
+  const retries = getIntegerInput('retries');
+  for (let i = 0; i <= retries; i++) {
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const sha = await createOrUpdateFiles(octokit, {...repo, branch, message, files});
+      core.setOutput('sha', sha);
+      return;
+    } catch (error) {
+      core.warning(`Failed to perform commit on attempt ${i + 1} of ${retries + 1}. Retrying`);
+    }
+  }
+  core.setFailed(`Could not perform commit after ${retries + 1} attempts`);
 }
 
 run().catch(err => core.setFailed(err));
