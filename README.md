@@ -1,5 +1,9 @@
 # Commit Changes Action
 
+<p align="center">
+  <a href="https://github.com/quizlet/commit-changes/actions"><img alt="commit-changes status" src="https://github.com/quizlet/commit-changes/workflows/Check,%20Build,%20and%20Run/badge.svg"></a>
+</p>
+
 This is an action that uses the [Github Git Database API][1] to commit changes to a branch.
 
 ## Inputs
