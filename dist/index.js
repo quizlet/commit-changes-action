@@ -2413,6 +2413,7 @@ async function createOrUpdateFiles(octokit, { owner, repo, branch, message, file
                 path,
                 sha: blob.sha,
                 type: 'blob',
+                // TODO: Grab previous mode if it exists. Right now types are getting in the way
                 mode: '100644',
             });
         }
@@ -2429,23 +2430,31 @@ async function createOrUpdateFiles(octokit, { owner, repo, branch, message, file
     try {
         const res = await octokit.git.createTree({ owner, repo, tree, base_tree: baseTree.sha });
         newTree = res.data;
+        core.debug(`Created new tree at ${newTree.sha}`);
     }
     catch (error) {
         throw Error(`Could not create new tree: ${error}`);
     }
-    core.debug(`Created new tree at ${newTree.sha}`);
     // Commit the new tree
-    const { data: commit } = await octokit.git.createCommit({
-        owner,
-        repo,
-        message,
-        tree: newTree.sha,
-        parents: [baseCommit.sha],
-    });
-    core.info(`Created commit with sha ${commit.sha}`);
+    let commit;
+    try {
+        const res = await octokit.git.createCommit({ owner, repo, message, tree: newTree.sha, parents: [baseCommit.sha] });
+        commit = res.data;
+        core.info(`Created commit with sha ${commit.sha}`);
+    }
+    catch (error) {
+        throw Error(`Could not create commit: ${error}`);
+    }
     // Update the branch to point at the commmit
-    const { data: updatedRef } = await octokit.git.updateRef({ owner, repo, ref, sha: commit.sha });
-    core.info(`Updated ${baseRef.ref} to ${updatedRef.object.sha}`);
+    let updatedRef;
+    try {
+        const res = await octokit.git.updateRef({ owner, repo, ref, sha: commit.sha });
+        updatedRef = res.data;
+        core.info(`Updated ${baseRef.ref} to ${updatedRef.object.sha}`);
+    }
+    catch (error) {
+        throw Error(`Could update ref ${ref}: ${error}`);
+    }
     return updatedRef.object.sha;
 }
 exports.createOrUpdateFiles = createOrUpdateFiles;
