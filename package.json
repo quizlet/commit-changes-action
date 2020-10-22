@@ -1,8 +1,8 @@
 {
-  "name": "automerge-changes",
+  "name": "commit-changes",
   "version": "0.1.0",
   "private": true,
-  "description": "Automatically merges changes",
+  "description": "Github action to automatically commit changes",
   "main": "lib/main.js",
   "scripts": {
     "format": "prettier --write **/*.ts",
