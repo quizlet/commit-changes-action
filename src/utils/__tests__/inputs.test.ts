@@ -26,4 +26,11 @@ describe('getBooleanInput', () => {
     expect(getBooleanInput(key)).toBe(false);
     expect(mockGetInput).toHaveBeenCalledWith(key, undefined);
   });
+
+  it('returns false for empty inputs', () => {
+    const key = 'input';
+    mockGetInput.mockReturnValueOnce('');
+    expect(getBooleanInput(key)).toBe(false);
+    expect(mockGetInput).toHaveBeenCalledWith(key, undefined);
+  });
 });
