@@ -1,20 +1,28 @@
-name: 'build-test'
+name: Check and Test
 on: # rebuild any PRs and main branch changes
   pull_request:
+    types: ['opened', 'synchronize']
   push:
     branches:
       - main
       - 'releases/*'
 
 jobs:
-  build: # make sure build/ci work properly
+  check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          npm install
-      - run: |
-          npm run all
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Install deps
+        run: npm ci
+      - name: Check formatting
+        run: npm run format-check
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm run test
+      - name: Package
+        run: npm run package
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
