@@ -47,7 +47,7 @@ with:
   glob-patterns: README.md
 ```
 
-### Multiple glob patters
+### Multiple glob patterns
 
 #### Comma separated
 
@@ -58,7 +58,7 @@ with:
   glob-patterns: README.md, *.json
 ```
 
-#### Newline separated patterns
+#### Newline separated
 
 ```yaml
 uses: quizlet/commit-changes@[ref]
@@ -73,6 +73,10 @@ with:
 ## Resources
 
 - [Minimatch cheat sheat][3]
+
+## License
+
+The code and documentation in this project are released under the [MIT License](LICENSE)
 
 [1]: https://docs.github.com/en/free-pro-team@latest/rest/reference/git
 [2]: https://github.com/isaacs/minimatch
