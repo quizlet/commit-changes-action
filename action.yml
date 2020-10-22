@@ -14,8 +14,8 @@ inputs:
   append-run-info:
     description: Appends information about the run to the commit message
     default: true
-  patterns:
-    description: List of glob patterns for files to commit. You can specify multiple patterns split by newlines
+  glob-patterns:
+    description: List of minimatch glob patterns for files to commit. Multiple patterns can be split with commas or newlines
     required: true
 outputs:
   sha:

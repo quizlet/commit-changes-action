@@ -58,11 +58,11 @@ jobs:
         with:
           branch: test
           message: ':robot: Test commit'
-          patterns: test.txt
+          glob-patterns: test.txt
       - name: Run action against protected-test with admin token
         uses: ./
         with:
           token: ${{ secrets.QUIZLET_GIT_BOT_TOKEN }}
           branch: protected-test
           message: ':robot: Test commit'
-          patterns: test.txt
+          glob-patterns: test.txt

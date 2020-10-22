@@ -1,6 +1,7 @@
 import {getInput} from '@actions/core';
 import {mocked} from 'ts-jest/utils';
-import {getBooleanInput} from '../inputs';
+import _ from 'lodash';
+import {getBooleanInput, getDelimitedArrayInput} from '../inputs';
 
 jest.mock('@actions/core');
 const mockGetInput = mocked(getInput, true);
@@ -31,6 +32,24 @@ describe('getBooleanInput', () => {
     const key = 'input';
     mockGetInput.mockReturnValueOnce('');
     expect(getBooleanInput(key)).toBe(false);
+    expect(mockGetInput).toHaveBeenCalledWith(key, undefined);
+  });
+});
+
+describe('getDelimitedArrayInput', () => {
+  it.each([',', ', '])('parses a comman separated list delimted by %p', delim => {
+    const key = 'input';
+    const value = ['foo', 'bar', 'baz'];
+    mockGetInput.mockReturnValueOnce(_.join(value, delim));
+    expect(getDelimitedArrayInput(key)).toStrictEqual(value);
+    expect(mockGetInput).toHaveBeenCalledWith(key, undefined);
+  });
+
+  it('parses a newline seperated list', () => {
+    const key = 'input';
+    const value = ['foo', 'bar', 'baz', 'value,with,commas'];
+    mockGetInput.mockReturnValueOnce(_.join(value, '\n'));
+    expect(getDelimitedArrayInput(key)).toStrictEqual(value);
     expect(mockGetInput).toHaveBeenCalledWith(key, undefined);
   });
 });

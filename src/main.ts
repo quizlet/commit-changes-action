@@ -1,10 +1,10 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import * as glob from '@actions/glob';
 import fs from 'fs';
 import path from 'path';
+import globby from 'globby';
 import {createOrUpdateFiles} from './commitFiles';
-import {getBooleanInput} from './utils/inputs';
+import {getBooleanInput, getDelimitedArrayInput} from './utils/inputs';
 
 async function run(): Promise<void> {
   // TODO(cooper): Check token perms
@@ -21,17 +21,17 @@ async function run(): Promise<void> {
     message += `\nCommit made by Github Actions ${url}`;
   }
 
-  const patterns = core.getInput('patterns', {required: true});
-  const globber = await glob.create(patterns);
+  const patterns = getDelimitedArrayInput('glob-patterns', {required: true});
+  const paths = await globby(patterns, {gitignore: true});
   const files = new Map<string, string>();
-  for await (const p of globber.globGenerator()) {
+  for await (const p of paths) {
     const repoPath = path.relative(process.cwd(), p);
     const contents = await fs.promises.readFile(p, 'base64');
     files.set(repoPath, contents);
   }
   core.debug(`Files to commit: ${[...files.keys()]}`);
   if (!files.size) {
-    core.warning('No files matched patterns.');
+    core.warning('No files matched glob patterns.');
     return;
   }
 
