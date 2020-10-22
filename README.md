@@ -1,103 +1,75 @@
-<p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
-</p>
+# Commit Changes Action
 
-# Create a JavaScript Action using TypeScript
+This is an action that uses the [Github Git Database API][1] to commit changes to a branch.
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+## Inputs
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+| Name              | Default/Required             | Description                                                                                                                                                   |
+| ----------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `message`         | **None**, required           | Message for the commit                                                                                                                                        |
+| `glob-patterns`   | **None**, required           | List of [minimatch glob patterns][2]. Matching files with changes will be committed. See the [examples](#example-usage) for how to specify multiple patterns. |
+| `token`           | Default Github Actions Token | Github token to authenticate as                                                                                                                               |
+| `branch`          | Default branch for the repo  | Branch to commit the changes to                                                                                                                               |
+| `append-run-info` | `true`                       | Whether to append information about the workflow to the commit                                                                                                |
+| `retries`         | 10                           | Number of times to retry the commit (which may fail due to non-fastfoward upates)                                                                             |
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
+## Outputs
 
-## Create an action from this template
+| Name  | Description                                                                          |
+| ----- | ------------------------------------------------------------------------------------ |
+| `sha` | SHA of the resulting commit. Will be empty string if there were no changes to commit |
 
-Click the `Use this Template` and provide the new repo details for your action
-
-## Code in Main
-
-Install the dependencies  
-```bash
-$ npm install
-```
-
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml contains defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
+## Example usage
 
 ```yaml
-uses: ./
+uses: quizlet/commit-changes@[ref]
 with:
-  milliseconds: 1000
+  message: Automated commit
+  glob-patterns: README.md
 ```
 
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
+### Setting token
 
-## Usage:
+Useful when:
 
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
+- You want to commit as a different actor than the default Github Actions token
+- You want to use an admin user to commit to a protected branch
+
+```yaml
+uses: quizlet/commit-changes@[ref]
+with:
+  token: ${{ secret.ADMIN_TOKEN }}
+  message: Automated commit
+  glob-patterns: README.md
+```
+
+### Multiple glob patters
+
+#### Comma separated
+
+```yaml
+uses: quizlet/commit-changes@[ref]
+with:
+  message: Automated commit
+  glob-patterns: README.md, *.json
+```
+
+#### Newline separated patterns
+
+```yaml
+uses: quizlet/commit-changes@[ref]
+with:
+  message: Automated commit
+  glob-patterns: |
+    README.md
+    # Comments are allowed
+    *.json
+```
+
+## Resources
+
+- [Minimatch cheat sheat][3]
+
+[1]: https://docs.github.com/en/free-pro-team@latest/rest/reference/git
+[2]: https://github.com/isaacs/minimatch
+[3]: https://github.com/motemen/minimatch-cheat-sheet

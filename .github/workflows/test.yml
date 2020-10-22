@@ -1,24 +1,68 @@
-name: 'build-test'
-on: # rebuild any PRs and main branch changes
+name: Check, Build, and Run
+on:
   pull_request:
+    types: ['opened', 'synchronize']
   push:
     branches:
       - main
       - 'releases/*'
 
+env:
+  HUSKY_SKIP_INSTALL: '1'
+
 jobs:
-  build: # make sure build/ci work properly
+  check:
+    name: Run code checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          npm install
-      - run: |
-          npm run all
-  test: # make sure the action works on a clean machine without building
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
         with:
-          milliseconds: 1000
+          node-version: 12.x
+      - name: Install deps
+        run: npm ci
+      - name: Check formatting
+        run: npm run format-check
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm run test
+  build:
+    name: Build action
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install deps
+        run: npm ci
+      - name: Build action
+        run: npm run build
+      - name: Verify no unstaged changes
+        run: .github/util/verify-no-unstaged-changes.sh
+  run-action:
+    name: Run action
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Generate file to commit
+        run: 'echo "$(date): Testing ${GITHUB_SHA}" > test.txt'
+      - name: Run action against test with default token
+        uses: ./
+        with:
+          branch: test
+          message: ':robot: Test commit'
+          glob-patterns: test.txt
+      - name: Run action against protected-test with admin token
+        uses: ./
+        with:
+          token: ${{ secrets.QUIZLET_GIT_BOT_TOKEN }}
+          branch: protected-test
+          message: ':robot: Test commit'
+          glob-patterns: test.txt

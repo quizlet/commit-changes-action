@@ -1,3 +1,9 @@
 dist/
 lib/
 node_modules/
+
+.prettierignore
+.gitignore
+.env.example
+
+*.sh

@@ -1,11 +1,31 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: Commit changes
+description: Automatically commits changes
+author: Quizlet
 inputs:
-  milliseconds: # change this
+  token:
+    description: Personal access token (PAT) used to perform actions against the repository
+    default: ${{ github.token }}
+  branch:
+    description: Branch to commit the changes to. If not set, the target will be the default branch for the repo
+    required: false
+  message:
+    description: Message for the resulting commit
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  append-run-info:
+    description: Appends information about the run to the commit message
+    default: true
+  glob-patterns:
+    description: List of minimatch glob patterns for files to commit. Multiple patterns can be split with commas or newlines
+    required: true
+  retries:
+    description: Number of times to retry the commit (which may fail due to non-fastfoward upates)
+    default: 10
+outputs:
+  sha:
+    description: SHA of the commit. Will be an empty string if there was nothing to commit.
 runs:
   using: 'node12'
   main: 'dist/index.js'
+branding:
+  icon: git-commit
+  color: blue

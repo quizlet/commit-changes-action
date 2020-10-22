@@ -1,19 +1,52 @@
-import * as core from '@actions/core'
-import {wait} from './wait'
+import * as core from '@actions/core';
+import * as github from '@actions/github';
+import fs from 'fs';
+import path from 'path';
+import globby from 'globby';
+import {createOrUpdateFiles} from './commitFiles';
+import {getBooleanInput, getDelimitedArrayInput, getIntegerInput} from './utils/inputs';
 
 async function run(): Promise<void> {
-  try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+  // TODO(cooper): Check token perms
+  const token = core.getInput('token');
+  const octokit = github.getOctokit(token);
+  const {repo} = github.context;
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+  const branch = core.getInput('branch');
 
-    core.setOutput('time', new Date().toTimeString())
-  } catch (error) {
-    core.setFailed(error.message)
+  let message = core.getInput('message', {required: true});
+  const appendRunInfo = getBooleanInput('append-run-info');
+  if (appendRunInfo) {
+    const url = `https://github.com/${repo.owner}/${repo.repo}/actions/runs/${github.context.runId}`;
+    message += `\nCommit made by Github Actions ${url}`;
   }
+
+  const patterns = getDelimitedArrayInput('glob-patterns', {required: true});
+  const paths = await globby(patterns, {gitignore: true});
+  const files = new Map<string, string>();
+  for await (const p of paths) {
+    const repoPath = path.relative(process.cwd(), p);
+    const contents = await fs.promises.readFile(p, 'base64');
+    files.set(repoPath, contents);
+  }
+  core.debug(`Files to commit: ${[...files.keys()]}`);
+  if (!files.size) {
+    core.warning('No files matched glob patterns.');
+    return;
+  }
+
+  const retries = getIntegerInput('retries');
+  for (let i = 0; i <= retries; i++) {
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const sha = await createOrUpdateFiles(octokit, {...repo, branch, message, files});
+      core.setOutput('sha', sha);
+      return;
+    } catch (error) {
+      core.warning(`Failed to perform commit on attempt ${i + 1} of ${retries + 1}. Retrying`);
+    }
+  }
+  core.setFailed(`Could not perform commit after ${retries + 1} attempts`);
 }
 
-run()
+run().catch(err => core.setFailed(err));

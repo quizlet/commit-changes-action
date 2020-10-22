@@ -1,45 +1,55 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "commit-changes",
+  "version": "0.1.0",
   "private": true,
-  "description": "TypeScript template action",
-  "main": "lib/main.js",
+  "description": "Github action to automatically commit changes",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
-    "package": "ncc build --source-map --license licenses.txt",
+    "build": "ncc build --minify --source-map src/main.ts",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+    "prestart": "npm run build",
+    "start": "node --enable-source-maps dist/index.js",
+    "all": "npm run format && npm run lint && npm test && npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/quizlet/commit-changes.git"
   },
   "keywords": [
     "actions",
     "node",
     "setup"
   ],
-  "author": "",
-  "license": "MIT",
+  "author": "Quizlet",
   "dependencies": {
-    "@actions/core": "^1.2.6"
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "@octokit/types": "^5.5.0",
+    "globby": "^11.0.1",
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.10",
-    "@types/node": "^14.10.0",
-    "@typescript-eslint/parser": "^3.10.1",
+    "@types/jest": "^26.0.15",
+    "@types/lodash": "^4.14.162",
+    "@types/node": "^14.14.0",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.0.0",
     "@vercel/ncc": "^0.23.0",
-    "eslint": "^7.8.1",
+    "eslint": "^7.11.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.14.0",
     "eslint-plugin-github": "^4.1.1",
     "eslint-plugin-jest": "^23.20.0",
+    "husky": "^4.3.0",
     "jest": "^24.9.0",
-    "jest-circus": "^26.4.2",
+    "jest-circus": "^26.6.0",
     "js-yaml": "^3.14.0",
+    "lint-staged": "^10.4.2",
     "prettier": "2.1.1",
     "ts-jest": "^24.3.0",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.3"
   }
 }
