@@ -2387,7 +2387,7 @@ async function getDefaultBranch(octokit, params) {
     return repo.default_branch;
 }
 async function createOrUpdateFiles(octokit, { owner, repo, branch, message, files }) {
-    const ref = `heads/${branch !== null && branch !== void 0 ? branch : (await getDefaultBranch(octokit, { owner, repo }))}`;
+    const ref = `heads/${branch || (await getDefaultBranch(octokit, { owner, repo }))}`;
     let baseRef;
     try {
         const res = await octokit.git.getRef({ owner, repo, ref });
