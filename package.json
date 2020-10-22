@@ -1,9 +1,6 @@
 {
   "name": "commit-changes",
-  "version": "0.1.0",
   "private": true,
-  "description": "Github action to automatically commit changes",
-  "main": "dist/index.js",
   "scripts": {
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
@@ -14,17 +11,6 @@
     "start": "node --enable-source-maps dist/index.js",
     "all": "npm run format && npm run lint && npm test && npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/quizlet/commit-changes.git"
-  },
-  "keywords": [
-    "actions",
-    "node",
-    "setup"
-  ],
-  "author": "Quizlet",
-  "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
