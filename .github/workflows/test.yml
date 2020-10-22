@@ -1,4 +1,4 @@
-name: Check and Run
+name: Check, Build, and Run
 on:
   pull_request:
     types: ['opened', 'synchronize']
@@ -17,6 +17,10 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
       - name: Install deps
         run: npm ci
       - name: Check formatting
@@ -25,8 +29,22 @@ jobs:
         run: npm run lint
       - name: Test
         run: npm run test
-      - name: Package
+  build:
+    name: Build action
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install deps
+        run: npm ci
+      - name: Build action
         run: npm run package
+      - name: Verify no unstaged changes
+        run: .github/util/verify-no-unstaged-changes.sh
   run-action:
     name: Run action
     runs-on: ubuntu-latest
