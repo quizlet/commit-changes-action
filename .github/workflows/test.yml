@@ -35,8 +35,15 @@ jobs:
         uses: actions/checkout@v2
       - name: Generate file to commit
         run: 'echo "$(date): Testing ${GITHUB_SHA}" > test.txt'
-      - uses: ./
+      - name: Run action against test with default token
+        uses: ./
         with:
           branch: test
+          message: ':robot: Test commit'
+          patterns: test.txt
+      - name: Run action against protected-test with admin token
+        uses: ./
+        with:
+          branch: protected-test
           message: ':robot: Test commit'
           patterns: test.txt
