@@ -10,7 +10,7 @@
     "lint": "eslint src/**/*.ts",
     "build": "tsc",
     "prepackage": "npm run build",
-    "package": "ncc build --source-map --license licenses.txt",
+    "package": "ncc build --minify",
     "test": "jest",
     "prestart": "npm run build",
     "start": "node lib/main.js",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/quizlet/automerge-changes.git"
+    "url": "git+https://github.com/quizlet/commit-changes.git"
   },
   "keywords": [
     "actions",
