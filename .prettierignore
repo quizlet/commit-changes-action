@@ -2,8 +2,9 @@ dist/
 lib/
 node_modules/
 
+*.sh
+
 .prettierignore
 .gitignore
 .env.example
-
-*.sh
+LICENSE
