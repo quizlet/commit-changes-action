@@ -38,5 +38,5 @@ jobs:
       - uses: ./
         with:
           branch: test
-          mesage: ':robot: Test commit'
+          message: ':robot: Test commit'
           patterns: test.txt
