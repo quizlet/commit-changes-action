@@ -11,6 +11,9 @@ inputs:
   message:
     description: Message for the resulting commit
     required: true
+  append-run-info:
+    description: Appends information about the run to the commit message
+    default: true
   files:
     description: List of patterns to commit. Multiple patterns can be split with newlines
     required: true

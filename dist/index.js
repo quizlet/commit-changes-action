@@ -1599,14 +1599,20 @@ const glob = __importStar(__webpack_require__(90));
 const fs_1 = __importDefault(__webpack_require__(747));
 const path_1 = __importDefault(__webpack_require__(622));
 const commitFiles_1 = __webpack_require__(225);
+const inputs_1 = __webpack_require__(188);
 async function run() {
     // TODO(cooper): Check token perms
     const token = core.getInput('token');
     const octokit = github.getOctokit(token);
     const { repo } = github.context;
     const branch = core.getInput('branch');
-    const message = core.getInput('message');
-    const patterns = core.getInput('patterns');
+    let message = core.getInput('message', { required: true });
+    const appendRunInfo = inputs_1.getBooleanInput('append-run-info');
+    if (appendRunInfo) {
+        const url = `https://github.com/${repo.owner}/${repo.repo}/actions/runs/${github.context.runId}`;
+        message += `\nCommit made by Github Actions ${url}`;
+    }
+    const patterns = core.getInput('patterns', { required: true });
     const globber = await glob.create(patterns);
     const files = new Map();
     for await (const p of globber.globGenerator()) {
@@ -1615,6 +1621,10 @@ async function run() {
         files.set(repoPath, contents);
     }
     core.debug(`Files to commit: ${[...files.keys()]}`);
+    if (!files.size) {
+        core.warning('No files matched patterns.');
+        return;
+    }
     const sha = await commitFiles_1.createOrUpdateFiles(octokit, { ...repo, branch, message, files });
     core.setOutput('sha', sha);
 }
@@ -1882,6 +1892,35 @@ function getState(name) {
 }
 exports.getState = getState;
 //# sourceMappingURL=core.js.map
+
+/***/ }),
+
+/***/ 188:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getBooleanInput = void 0;
+const core_1 = __webpack_require__(186);
+const lodash_1 = __importDefault(__webpack_require__(250));
+/**
+ * Gets an input and interprets it as a boolean value. Will treat any value matching true, t, yes, y, on, or 1 (case
+ * insensitive) as true, anything that doesn't match is false.
+ *
+ * @param {string} name - @see getInput.
+ * @param {InputOptions} options - @see getInput.
+ * @returns {string[]} The value converted to a list of strings.
+ */
+function getBooleanInput(name, options) {
+    const value = core_1.getInput(name, options).toLowerCase();
+    return lodash_1.default.includes(['true', 't', 'yes', 'y', 'on', '1'], value);
+}
+exports.getBooleanInput = getBooleanInput;
+//# sourceMappingURL=inputs.js.map
 
 /***/ }),
 
