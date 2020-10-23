@@ -1,3 +1,7 @@
+# Sourcemaps
+dist/index.js.map
+dist/sourcemap-register.js
+
 # Dependency directory
 node_modules
 
