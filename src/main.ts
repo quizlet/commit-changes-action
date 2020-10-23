@@ -43,7 +43,7 @@ async function run(): Promise<void> {
       core.setOutput('sha', sha);
       return;
     } catch (error) {
-      core.warning(`Failed to perform commit on attempt ${i + 1} of ${retries + 1}. Retrying`);
+      core.warning(`Error while performing commit (attempt ${i + 1}/${retries + 1}): ${error}`);
     }
   }
   core.setFailed(`Could not perform commit after ${retries + 1} attempts`);
