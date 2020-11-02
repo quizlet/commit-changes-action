@@ -35,6 +35,6 @@
 <!--- Include as many relevant details about the environment you experienced the bug in --->
 
 - Version used:
-- Runner version: <!--- Value of `runs-on` ---->
+- Runner version: <!--- Value of `runs-on` --->
 - Variables:
-  - <!--- i.e contents of the `with` block ---->
+  - <!--- i.e contents of the `with` block --->
