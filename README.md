@@ -72,9 +72,13 @@ with:
 
 - [Minimatch cheat sheat][3]
 
+## Contributing
+
+Feel free to check out our [Contributor's Guide](docs/CONTRIBUTING.md).
+
 ## License
 
-The code and documentation in this project are released under the [MIT License](LICENSE)
+The code and documentation in this project are released under the [MIT License](LICENSE).
 
 [1]: https://docs.github.com/en/free-pro-team@latest/rest/reference/git
 [2]: https://github.com/isaacs/minimatch
