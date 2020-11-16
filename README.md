@@ -72,6 +72,7 @@ with:
 ## Resources
 
 - [Minimatch cheat sheat][3]
+- [Minimatch glob tester][4]
 
 ## Contributing
 
@@ -84,3 +85,4 @@ The code and documentation in this project are released under the [MIT License](
 [1]: https://docs.github.com/en/free-pro-team@latest/rest/reference/git
 [2]: https://github.com/isaacs/minimatch
 [3]: https://github.com/motemen/minimatch-cheat-sheet
+[4]: https://globster.xyz/
