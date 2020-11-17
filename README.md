@@ -73,6 +73,7 @@ with:
 
 - [Minimatch cheat sheat][3]
 - [Minimatch glob tester][4]
+- [globby-cli][5]: Useful for testing globs locally (i.e. `npx globby-cli --gitignore [glob]`)
 
 ## Contributing
 
@@ -86,3 +87,4 @@ The code and documentation in this project are released under the [MIT License](
 [2]: https://github.com/isaacs/minimatch
 [3]: https://github.com/motemen/minimatch-cheat-sheet
 [4]: https://globster.xyz/
+[5]: https://github.com/jamiebuilds/globby-cli
