@@ -71,6 +71,7 @@ with:
 
 ## Resources
 
+- [Tech @ Quzlet Blog Post][6]: Explains background for the project
 - [Minimatch cheat sheat][3]
 - [Minimatch glob tester][4]
 - [globby-cli][5]: Useful for testing globs locally (i.e. `npx globby-cli --gitignore [glob]`)
@@ -88,3 +89,4 @@ The code and documentation in this project are released under the [MIT License](
 [3]: https://github.com/motemen/minimatch-cheat-sheet
 [4]: https://globster.xyz/
 [5]: https://github.com/jamiebuilds/globby-cli
+[6]: https://medium.com/tech-quizlet/circumventing-branch-protection-for-fun-and-gitops-5133e234de7b
