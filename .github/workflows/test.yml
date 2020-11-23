@@ -76,5 +76,7 @@ jobs:
           message: ':robot: Test commit of static.txt'
           glob-patterns: static.txt
       - name: Fail if unchanged file was committed
-        run: exit 1
+        run: |
+          echo ${{ steps.unchanged-commit.outputs.sha }}
+          exit 1
         if: ${{ steps.unchanged-commit.outputs.sha }} != ""
