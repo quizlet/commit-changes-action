@@ -77,6 +77,7 @@ jobs:
           glob-patterns: static.txt
       - name: Fail if unchanged file was committed
         run: |
-          echo ${{ steps.unchanged-commit.outputs.sha }}
-          exit 1
-        if: steps.unchanged-commit.outputs.sha != ""
+          if [[ -n "${{steps.unchanged-commit.outputs.sha}}"]]; then
+            echo "::error::Action commited the unchanged file"
+            exit 1
+          fi
