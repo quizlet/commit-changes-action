@@ -2,7 +2,7 @@ import {GitHub} from '@actions/github/lib/utils';
 import {Endpoints} from '@octokit/types';
 import * as core from '@actions/core';
 import _ from 'lodash';
-import {sha1HashB64String} from './utils/hash';
+import {computeBlobHashB64String} from './utils/hash';
 
 export type Octokit = InstanceType<typeof GitHub>;
 type Tree = Endpoints['POST /repos/:owner/:repo/git/trees']['parameters']['tree'];
@@ -49,7 +49,7 @@ export async function createOrUpdateFiles(
       throw Error('Refusing to replace non-blob tree entry');
     }
 
-    const hash = sha1HashB64String(content);
+    const hash = computeBlobHashB64String(content);
     if (hash !== previousEntry?.sha) {
       const {data: blob} = await octokit.git.createBlob({owner, repo, content, encoding: 'base64'});
 
