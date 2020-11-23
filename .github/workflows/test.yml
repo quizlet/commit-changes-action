@@ -51,8 +51,10 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-      - name: Generate file to commit
-        run: 'echo "$(date): Testing ${GITHUB_SHA}" > test.txt'
+      - name: Generate files to commit
+        run: |
+          echo "$(date): Testing ${GITHUB_SHA}" > test.txt
+          echo "static value" > static.txt
       - name: Run action against test with default token
         uses: ./
         with:
@@ -66,3 +68,17 @@ jobs:
           branch: protected-test
           message: ':robot: Test commit'
           glob-patterns: test.txt
+      - name: Run action against unchanged file
+        id: unchanged-commit
+        uses: ./
+        with:
+          branch: test
+          message: ':robot: Test commit of static.txt'
+          glob-patterns: static.txt
+      - name: Fail if unchanged file was committed
+        run: |
+          if [[ -n "${{steps.unchanged-commit.outputs.sha}}" ]]
+          then
+            echo "::error::Action commited the unchanged file"
+            exit 1
+          fi
