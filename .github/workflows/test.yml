@@ -77,4 +77,4 @@ jobs:
           glob-patterns: static.txt
       - name: Fail if unchanged file was committed
         run: exit 1
-        if: ${{ steps.unchanged-commit.outputs.sha }} !== ""
+        if: ${{ steps.unchanged-commit.outputs.sha }} != ""
