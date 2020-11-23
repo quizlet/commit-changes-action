@@ -79,4 +79,4 @@ jobs:
         run: |
           echo ${{ steps.unchanged-commit.outputs.sha }}
           exit 1
-        if: ${{ steps.unchanged-commit.outputs.sha }} != ""
+        if: steps.unchanged-commit.outputs.sha != ""
