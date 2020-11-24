@@ -7,13 +7,20 @@ import _ from 'lodash';
  *
  * @param {string} name - @see getInput.
  * @param {InputOptions} options - @see getInput.
- * @returns {string[]} The value converted to a list of strings.
+ * @returns {boolean} The value converted to a boolean.
  */
 export function getBooleanInput(name: string, options?: InputOptions): boolean {
   const value = getInput(name, options).toLowerCase();
   return _.includes(['true', 't', 'yes', 'y', 'on', '1'], value);
 }
 
+/**
+ * Gets and input and interprets it as an integer
+ *
+ * @param {string} name - @see getInput.
+ * @param {InputOptions} options - @see getInput.
+ * @returns {number} The value interpreted as an integer.
+ */
 export function getIntegerInput(name: string, options?: InputOptions): number {
   const value = getInput(name, options);
   const int = parseInt(value, 10);
