@@ -35,5 +35,5 @@ export function getDelimitedArrayInput(name: string, options?: InputOptions): st
   const value = getInput(name, options);
   const sep = _.includes(value, '\n') ? '\n' : ',';
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  return _.map(_.split(value, sep), _.trim);
+  return _.map(_.filter(_.split(value, sep)), _.trim);
 }
