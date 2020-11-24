@@ -61,6 +61,7 @@ describe('getDelimitedArrayInput', () => {
     expect(getDelimitedArrayInput(key)).toStrictEqual(value);
     expect(mockGetInput).toHaveBeenCalledWith(key, undefined);
   });
+
   it('ignores trailing newlines', () => {
     const key = 'input';
     const value = ['foo', 'bar', 'baz'];
