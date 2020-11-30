@@ -1,7 +1,7 @@
 import {getInput} from '@actions/core';
 import {mocked} from 'ts-jest/utils';
 import _ from 'lodash';
-import {getBooleanInput, getDelimitedArrayInput} from '../inputs';
+import {getBooleanInput, getDelimitedArrayInput, getIntegerInput} from '../inputs';
 
 jest.mock('@actions/core');
 const mockGetInput = mocked(getInput, true);
@@ -32,6 +32,24 @@ describe('getBooleanInput', () => {
     const key = 'input';
     mockGetInput.mockReturnValueOnce('');
     expect(getBooleanInput(key)).toBe(false);
+    expect(mockGetInput).toHaveBeenCalledWith(key, undefined);
+  });
+});
+
+describe('getIntegerInput', () => {
+  it('returns the correct integer', () => {
+    const key = 'input';
+    mockGetInput.mockReturnValueOnce('42');
+    expect(getIntegerInput(key)).toBe(42);
+    expect(mockGetInput).toHaveBeenCalledWith(key, undefined);
+  });
+
+  it('raises on non-integer input', () => {
+    const key = 'input';
+    mockGetInput.mockReturnValueOnce('foobar');
+    expect(() => {
+      getIntegerInput(key);
+    }).toThrow(TypeError);
     expect(mockGetInput).toHaveBeenCalledWith(key, undefined);
   });
 });
