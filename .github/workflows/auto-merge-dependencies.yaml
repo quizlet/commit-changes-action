@@ -1,0 +1,17 @@
+name: auto-merge
+
+on:
+  pull_request:
+    types: ['opened', 'synchronize']
+    branches: ['dependabot/*']
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Auto-merge
+        uses: ahmadnassri/action-dependabot-auto-merge@v2
+        with:
+          github-token: ${{ secrets.QUIZLET_GIT_BOT_TOKEN }}
