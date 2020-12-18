@@ -3,7 +3,7 @@ name: auto-merge
 on:
   pull_request:
     types: ['opened', 'synchronize']
-    branches: ['dependabot/*']
+    branches: ['dependabot/**']
 
 jobs:
   auto-merge:
