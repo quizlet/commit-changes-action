@@ -5,7 +5,7 @@ import _ from 'lodash';
 import {computeBlobHashB64String} from './utils/hash';
 
 export type Octokit = InstanceType<typeof GitHub>;
-type Tree = Endpoints['POST /repos/:owner/:repo/git/trees']['parameters']['tree'];
+type Tree = Endpoints['POST /repos/{owner}/{repo}/git/trees']['parameters']['tree'];
 
 export interface CreateOrUpdateFilesParams {
   owner: string;
@@ -35,9 +35,11 @@ export async function createOrUpdateFiles(
   } catch (error) {
     throw Error(`Could not get base ref ${owner}/${repo}:${ref}: ${error}`);
   }
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   const {data: baseCommit} = await octokit.git.getCommit({owner, repo, commit_sha: baseRef.object.sha});
   core.debug(`Base ref ${baseRef.ref} is at commit ${baseCommit.sha}`);
 
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   const {data: baseTree} = await octokit.git.getTree({owner, repo, tree_sha: baseCommit.tree.sha, recursive: 'true'});
   core.debug(`Base tree is at ${baseTree.sha}`);
 
@@ -72,6 +74,7 @@ export async function createOrUpdateFiles(
   // Create the new tree
   let newTree;
   try {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     const res = await octokit.git.createTree({owner, repo, tree, base_tree: baseTree.sha});
     newTree = res.data;
     core.debug(`Created new tree at ${newTree.sha}`);
