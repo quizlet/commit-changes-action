@@ -71,7 +71,7 @@ with:
 
 ## Resources
 
-- [Tech @ Quzlet Blog Post][6]: Explains background for the project
+- [Tech @ Quizlet Blog Post][6]: Explains background for the project
 - [Minimatch cheat sheat][3]
 - [Minimatch glob tester][4]
 - [globby-cli][5]: Useful for testing globs locally (i.e. `npx globby-cli --gitignore [glob]`)
