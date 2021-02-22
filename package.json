@@ -17,7 +17,7 @@
     "@actions/github": "^4.0.0",
     "@octokit/types": "^6.10.0",
     "globby": "^11.0.2",
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
