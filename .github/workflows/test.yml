@@ -1,7 +1,6 @@
 name: Check, Build, and Run
 on:
   pull_request:
-    types: ['opened', 'synchronize']
   push:
     branches:
       - main
@@ -55,12 +54,13 @@ jobs:
         run: |
           echo "$(date): Testing ${GITHUB_SHA}" > test.txt
           echo "static value" > static.txt
-      - name: Run action against test with default token
-        uses: ./
-        with:
-          branch: test
-          message: ':robot: Test commit'
-          glob-patterns: test.txt
+      # TODO: Disabled since forks and dependabot don't have access to a read-write token
+      # - name: Run action against test with default token
+      #   uses: ./
+      #   with:
+      #     branch: test
+      #     message: ':robot: Test commit'
+      #     glob-patterns: test.txt
       - name: Run action against protected-test with admin token
         uses: ./
         with:
