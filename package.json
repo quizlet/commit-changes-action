@@ -16,7 +16,7 @@
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "@octokit/types": "^6.13.0",
-    "globby": "^11.0.2",
+    "globby": "^11.0.3",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
