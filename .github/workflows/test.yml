@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - name: Setup node
         uses: actions/setup-node@v2.1.5
         with:
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - name: Setup node
         uses: actions/setup-node@v2.1.5
         with:
@@ -51,7 +51,7 @@ jobs:
 #     runs-on: ubuntu-latest
 #     steps:
 #       - name: Checkout repo
-#         uses: actions/checkout@v2
+#         uses: actions/checkout@v2.3.4
 #       - name: Generate files to commit
 #         run: |
 #           echo "$(date): Testing ${GITHUB_SHA}" > test.txt
