@@ -19,7 +19,7 @@ async function getDefaultBranch(
   octokit: Octokit,
   params: Pick<CreateOrUpdateFilesParams, 'owner' | 'repo'>
 ): Promise<string> {
-  const {data: repo} = await octokit.repos.get(params);
+  const {data: repo} = await octokit.rest.repos.get(params);
   return repo.default_branch;
 }
 
@@ -30,17 +30,22 @@ export async function createOrUpdateFiles(
   const ref = `heads/${branch || (await getDefaultBranch(octokit, {owner, repo}))}`;
   let baseRef;
   try {
-    const res = await octokit.git.getRef({owner, repo, ref});
+    const res = await octokit.rest.git.getRef({owner, repo, ref});
     baseRef = res.data;
   } catch (error) {
     throw Error(`Could not get base ref ${owner}/${repo}:${ref}: ${error}`);
   }
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const {data: baseCommit} = await octokit.git.getCommit({owner, repo, commit_sha: baseRef.object.sha});
+  const {data: baseCommit} = await octokit.rest.git.getCommit({owner, repo, commit_sha: baseRef.object.sha});
   core.debug(`Base ref ${baseRef.ref} is at commit ${baseCommit.sha}`);
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const {data: baseTree} = await octokit.git.getTree({owner, repo, tree_sha: baseCommit.tree.sha, recursive: 'true'});
+  const {data: baseTree} = await octokit.rest.git.getTree({
+    owner,
+    repo,
+    tree_sha: baseCommit.tree.sha,
+    recursive: 'true',
+  });
   core.debug(`Base tree is at ${baseTree.sha}`);
 
   // Construct the new tree
@@ -53,7 +58,7 @@ export async function createOrUpdateFiles(
 
     const hash = computeBlobHashB64String(content);
     if (hash !== previousEntry?.sha) {
-      const {data: blob} = await octokit.git.createBlob({owner, repo, content, encoding: 'base64'});
+      const {data: blob} = await octokit.rest.git.createBlob({owner, repo, content, encoding: 'base64'});
 
       tree.push({
         path,
@@ -75,7 +80,7 @@ export async function createOrUpdateFiles(
   let newTree;
   try {
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    const res = await octokit.git.createTree({owner, repo, tree, base_tree: baseTree.sha});
+    const res = await octokit.rest.git.createTree({owner, repo, tree, base_tree: baseTree.sha});
     newTree = res.data;
     core.debug(`Created new tree at ${newTree.sha}`);
   } catch (error) {
@@ -85,7 +90,13 @@ export async function createOrUpdateFiles(
   // Commit the new tree
   let commit;
   try {
-    const res = await octokit.git.createCommit({owner, repo, message, tree: newTree.sha, parents: [baseCommit.sha]});
+    const res = await octokit.rest.git.createCommit({
+      owner,
+      repo,
+      message,
+      tree: newTree.sha,
+      parents: [baseCommit.sha],
+    });
     commit = res.data;
     core.info(`Created commit with sha ${commit.sha}`);
   } catch (error) {
@@ -95,7 +106,7 @@ export async function createOrUpdateFiles(
   // Update the branch to point at the commmit
   let updatedRef;
   try {
-    const res = await octokit.git.updateRef({owner, repo, ref, sha: commit.sha});
+    const res = await octokit.rest.git.updateRef({owner, repo, ref, sha: commit.sha});
     updatedRef = res.data;
     core.info(`Updated ${baseRef.ref} to ${updatedRef.object.sha}`);
   } catch (error) {
