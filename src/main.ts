@@ -2,7 +2,7 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import fs from 'fs';
 import path from 'path';
-import globby from 'globby';
+import {globby} from 'globby';
 import {createOrUpdateFiles} from './commitFiles';
 import {getBooleanInput, getDelimitedArrayInput, getIntegerInput} from './utils/inputs';
 
