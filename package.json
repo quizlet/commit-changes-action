@@ -15,7 +15,7 @@
   "dependencies": {
     "@actions/core": "^1.5.0",
     "@actions/github": "^5.0.0",
-    "@octokit/types": "^6.27.1",
+    "@octokit/types": "^6.27.2",
     "globby": "^12.0.2",
     "lodash": "^4.17.21"
   },
