@@ -10,7 +10,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2.4.0
       - name: Auto-merge
-        uses: ahmadnassri/action-dependabot-auto-merge@v2.4
+        uses: ahmadnassri/action-dependabot-auto-merge@v2.6
         with:
           github-token: ${{ secrets.QUIZLET_GIT_BOT_TOKEN }}
           command: squash and merge
