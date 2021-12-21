@@ -20,7 +20,8 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2.5.0
         with:
-          node-version: 12.x
+          node-version-file: .node-version
+          cache: npm
       - name: Install deps
         run: npm ci
       - name: Check formatting
@@ -38,7 +39,8 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2.5.0
         with:
-          node-version: 12.x
+          node-version-file: .node-version
+          cache: npm
       - name: Install deps
         run: npm ci
       - name: Build action

@@ -24,7 +24,7 @@ outputs:
   sha:
     description: SHA of the commit. Will be an empty string if there was nothing to commit.
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
 branding:
   icon: git-commit
