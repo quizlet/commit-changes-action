@@ -1,1 +1,5 @@
-* @quizlet/commit-changes-maintainers
+*  @quizlet/sg-engineering-platform
+
+# Dependencies
+package*.json       @quizlet/sg-engineering-platform @Quizlet-Git-Bot
+.github/workflows/  @quizlet/sg-engineering-platform @Quizlet-Git-Bot
