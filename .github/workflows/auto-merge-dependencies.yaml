@@ -9,19 +9,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      - name: Get secrets from Vault
-        id: secrets
-        uses: hashicorp/vault-action@v2.4.1
-        with:
-          url: https://vault.dev.qzlt.io/
-          method: approle
-          roleId: ${{ secrets.VAULT_ROLE_ID }}
-          secretId: ${{ secrets.VAULT_ROLE_SECRET }}
-          secrets: |
-            secret/data/ci/github/access_token     value | GITHUB_TOKEN ;
       - name: Auto-merge
         uses: ahmadnassri/action-dependabot-auto-merge@v2.6
         with:
-          github-token: ${{ steps.secrets.outputs.GITHUB_TOKEN }}
+          github-token: ${{ secrets.QUIZLET_GIT_BOT_TOKEN }}
           command: squash and merge
           config: .github/auto-merge.yaml
